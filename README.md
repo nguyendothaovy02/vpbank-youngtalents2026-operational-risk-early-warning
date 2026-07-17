@@ -64,7 +64,7 @@ cycle, unsuitable for real-time early warning).
 │   └── kri_queries.sql         # KRI computations (PostgreSQL / DuckDB)
 ├── notebooks/
 │   └── anomaly_detection.ipynb # thresholds + Isolation Forest + validation
-├── dashboard/                  # Power BI dashboard (.pbix) + screenshots
+├── dashboard/    # Power BI dashboard (.pbix), PDF export + screenshots
 └── README.md
 ```
 
