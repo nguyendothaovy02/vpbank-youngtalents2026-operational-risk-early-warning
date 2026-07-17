@@ -1,0 +1,7 @@
+kri,limit
+KRI1_TxnFailureRate,5
+KRI2_FailureVelocity,2
+KRI3_Users3Fails,2
+KRI4_eKYCDropoff,46.7
+KRI5_ManualOverride,0.27
+KRI6_OverdueTraining,10
