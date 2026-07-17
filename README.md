@@ -40,8 +40,20 @@ reactive ~4 hours (customer-complaint driven) to a proactive ~30 minutes
 | 5 | Manual Override Rate | Process / People | > μ + 2σ |
 | 6 | Overdue Mandatory Training | People | > 10% |
 
-Thresholds follow a **baseline + 2σ (≈ p95)** rule computed on historical data,
-reviewed quarterly. This is reproducible in the notebook, not hand-picked.
+**Note on KRI 3 (synthetic data caveat).** In this prototype, `users_3plus_fails`
+is generated with a built-in correlation to the injected outages (see
+`generate_data.py`). It is therefore a transparent *proxy* derived from the same
+system-stress signal, not an independent measurement. Consequently, the model's
+100% recall is partly a property of the data generator (label-adjacent feature),
+not a standalone performance claim. On real data, KRI 3 would be computed
+independently from session logs.
+
+**On thresholds.** KRI 1, 2, 3 and 6 use operational limits (5%, 2×, 2%, 10%)
+based on industry practice, chosen for interpretability. KRI 4 and 5 have no
+obvious operational standard, so they use a data-driven **p95** cutoff computed
+in the notebook (46.7% and 0.27%). All limits are reviewed quarterly. In
+production, every threshold would be calibrated by measuring false-alarm rate
+against historical data.
 
 **Deliberately excluded:** System Downtime (a *lagging* indicator - it reports a
 failure rather than warning of it) and staff turnover (measured on a monthly
@@ -64,7 +76,11 @@ cycle, unsuitable for real-time early warning).
 │   └── kri_queries.sql         # KRI computations (PostgreSQL / DuckDB)
 ├── notebooks/
 │   └── anomaly_detection.ipynb # thresholds + Isolation Forest + validation
-├── dashboard/    # Power BI dashboard (.pbix), PDF export + screenshots
+├── dashboard/
+│   ├── dashboard.pbix          # Power BI dashboard (3 pages)
+│   ├── dashboard.pdf           # PDF export (view without Power BI)
+│   ├── kri_from_sql.csv        # 6 KRIs, exported by the notebook (dashboard source)
+│   └── thresholds.csv          # p95 limits for KRI 4 & 5 (single source of truth)
 └── README.md
 ```
 
@@ -123,6 +139,19 @@ before any critical alert is escalated - to prevent alert fatigue.
 - **Human-in-the-loop:** expert review required before any critical action.
 - **Interpretability:** a simple model is chosen deliberately - every alert
   must be explainable to the 2nd line of defense.
+
+---
+
+## 7. Value assumptions
+
+The headline metric is **Time-to-Detect**, reduced from a reactive ~4 hours
+(customer-complaint driven) to a proactive ~30 minutes (signal driven) - both
+illustrative targets, not measured values.
+
+Deliberately **no financial figure** is claimed. Avoided loss depends on
+VPBank's real transaction volume, retry behaviour and penalty structure, none
+of which are available in this synthetic exercise. The value case rests on
+faster detection shrinking the exposure window, not on a headline VND number.  
 
 ---
 

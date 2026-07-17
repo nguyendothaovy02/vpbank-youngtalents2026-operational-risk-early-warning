@@ -52,6 +52,22 @@ ORDER BY date;
 
 
 -- ------------------------------------------------------------
+-- KRI 3 — Users with >= 3 failed transactions (% of active users)
+-- Measures customer-facing pain: how many users hit repeated
+-- failures, not just the raw system failure rate.
+-- NOTE (synthetic data): users_3plus_fails is generated with a
+-- built-in correlation to injected outages, so on this dataset
+-- KRI 3 is a transparent proxy rather than an independent signal.
+-- ------------------------------------------------------------
+SELECT
+    date,
+    ROUND(100.0 * users_3plus_fails
+          / NULLIF(active_users, 0), 2)                      AS users_3fail_pct
+FROM read_csv_auto('../data/transactions_daily.csv')
+ORDER BY date;
+
+
+-- ------------------------------------------------------------
 -- KRI 4 — eKYC Step-level Drop-off
 -- Drop-off rate at each onboarding step. Liveness is expected
 -- to be the bottleneck. Computed as drop / started.
