@@ -55,6 +55,19 @@ in the notebook (46.7% and 0.27%). All limits are reviewed quarterly. In
 production, every threshold would be calibrated by measuring false-alarm rate
 against historical data.
 
+**Known limitation — statistical limits normalise the status quo.** A percentile
+limit is learned from what actually happens, so a chronically poor metric raises
+its own limit instead of triggering it. KRI 4 is the clearest case: eKYC drop-off
+sits around 40%, so the p95 limit (46.7%) only fires when onboarding is worse
+than its own bad baseline - it never asks whether losing 40% of applicants is
+acceptable in the first place. That is a **business KPI** question (an owner-set
+target), not a KRI question: setting the KRI at the desired level instead would
+breach every single day and produce alert fatigue. The two therefore serve
+different purposes - the KRI catches acute incidents, a separate KPI target
+governs long-run performance. Chronic decay is surfaced a third way, by the
+monthly heatmap, where KRI 4 visibly warms from 88% to 106% of limit across the
+period even though the static limit never fires.
+
 **Deliberately excluded:** System Downtime (a *lagging* indicator - it reports a
 failure rather than warning of it) and staff turnover (measured on a monthly
 cycle, unsuitable for real-time early warning).
