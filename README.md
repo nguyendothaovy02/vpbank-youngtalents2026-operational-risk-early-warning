@@ -36,8 +36,8 @@ reactive ~4 hours (customer-complaint driven) to a proactive ~30 minutes
 | 1 | Transaction Failure Rate (SYSTEM + PARTNER only) | System | > 5% |
 | 2 | Failure Rate Velocity (rate of change) | System | > 2× |
 | 3 | Users with ≥ 3 failed transactions | System → Customer | > 2% |
-| 4 | eKYC step-level drop-off | Process | any step > μ + 2σ |
-| 5 | Manual Override Rate | Process / People | > μ + 2σ |
+| 4 | eKYC step-level drop-off | Process | > 46.7% (p95) |
+| 5 | Manual Override Rate | Process / People | > 0.27% (p95) |
 | 6 | Overdue Mandatory Training | People | > 10% |
 
 **Note on KRI 3 (synthetic data caveat).** In this prototype, `users_3plus_fails`
